@@ -73,6 +73,42 @@ const crtBoom = (delay = 0, x = 0, rd = 46) => {
   return [crcl, brst];
 };
 
+// Function to create popup hearts
+const createPopupHearts = (count = 8) => {
+  const container = qs(".hearts-container");
+  const directions = ["left", "center", "right"];
+  
+  for (let i = 0; i < count; i++) {
+    const heart = document.createElement("div");
+    heart.className = "popup-heart";
+    
+    // Random direction
+    const direction = directions[Math.floor(Math.random() * directions.length)];
+    if (direction !== "center") {
+      heart.classList.add(direction);
+    }
+    
+    // Random horizontal position
+    const randomX = Math.random() * window.innerWidth;
+    heart.style.left = randomX + "px";
+    heart.style.top = (window.innerHeight - 50) + "px";
+    
+    // Random delay
+    heart.style.animationDelay = (Math.random() * 0.5) + "s";
+    
+    // Random heart emoji color variation
+    const hearts = ["❤️", "💕", "💖", "💗"];
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    
+    container.appendChild(heart);
+    
+    // Remove heart after animation completes
+    setTimeout(() => {
+      heart.remove();
+    }, 2500);
+  }
+};
+
 const crtLoveTl = () => {
   const move = 1000;
   const boom = 200;
@@ -119,6 +155,8 @@ const crtLoveTl = () => {
       onComplete: () => {
         el.u.style.opacity = 0;
         el.blup.play();
+        // Trigger popup hearts when the main animation completes
+        createPopupHearts(8);
       },
     }),
 
